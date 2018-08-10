@@ -355,7 +355,8 @@ class RangerPolicyRepository {
     private List<RangerPolicyEvaluator> getLikelyMatchAccessPolicyEvaluators(RangerAccessResource resource) {
        String resourceStr = resource == null ? null : resource.getAsString();
 
-       return policyResourceTrie == null || StringUtils.isEmpty(resourceStr)  ? getPolicyEvaluators() : getLikelyMatchPolicyEvaluators(policyResourceTrie, resource);
+       return policyResourceTrie == null || StringUtils.isEmpty(resourceStr)
+               ? getPolicyEvaluators() : resource.isShowDatabases() ? getResourceMatchPolicyEvaluators(resource) : getLikelyMatchPolicyEvaluators(policyResourceTrie, resource);
     }
 
     private List<RangerPolicyEvaluator> getLikelyMatchDataMaskPolicyEvaluators(RangerAccessResource resource) {
@@ -434,6 +435,26 @@ class RangerPolicyRepository {
             LOG.debug("<== RangerPolicyRepository.getLikelyMatchPolicyEvaluators(" + resource.getAsString() + "): evaluatorCount=" + ret.size());
         }
 
+        return ret;
+    }
+
+    List<RangerPolicyEvaluator> getResourceMatchPolicyEvaluators(RangerAccessResource resource) {
+        List<RangerPolicyEvaluator> ret = new ArrayList<>();
+        Set<String> resourceKeys = resource == null ? null : resource.getKeys();
+        if (CollectionUtils.isNotEmpty(resourceKeys)) {
+            for (RangerPolicyEvaluator policyEvaluator : policyEvaluators) {
+                RangerPolicy rangerPolicy =  policyEvaluator.getPolicy();
+                Set<String> policyResourceKeys = rangerPolicy == null ? null : rangerPolicy.getResources() == null? null: rangerPolicy.getResources().keySet();
+                if(CollectionUtils.isNotEmpty(policyResourceKeys)) {
+                    for (String policyResourceKey : policyResourceKeys) {
+                        if (resourceKeys.contains(policyResourceKey)) {
+                            ret.add(policyEvaluator);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
         return ret;
     }
 

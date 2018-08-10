@@ -48,4 +48,6 @@ public interface RangerAccessResource {
 	Map<String, String> getAsMap();
 
 	RangerAccessResource getReadOnlyCopy();
+
+	boolean isShowDatabases();
 }

@@ -37,6 +37,8 @@ public class RangerAccessResourceImpl implements RangerMutableResource {
 	private String              leafName;
 	private RangerServiceDef    serviceDef;
 
+	private boolean isShowDatabases;
+
 	public RangerAccessResourceImpl() {
 		this(null, null);
 	}
@@ -242,6 +244,15 @@ public class RangerAccessResourceImpl implements RangerMutableResource {
 		toString(sb);
 
 		return sb.toString();
+	}
+
+	@Override
+	public boolean isShowDatabases() {
+		return isShowDatabases;
+	}
+
+	public void setShowDatabases(boolean showDatabases) {
+		isShowDatabases = showDatabases;
 	}
 
 	public StringBuilder toString(StringBuilder sb) {

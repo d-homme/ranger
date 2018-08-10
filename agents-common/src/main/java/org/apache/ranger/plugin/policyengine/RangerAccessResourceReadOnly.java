@@ -69,4 +69,9 @@ public class RangerAccessResourceReadOnly implements RangerAccessResource {
 	public Map<String, String> getAsMap() { return map; }
 
 	public RangerAccessResource getReadOnlyCopy() { return this; }
+
+	@Override
+	public boolean isShowDatabases() {
+		return source.isShowDatabases();
+	}
 }

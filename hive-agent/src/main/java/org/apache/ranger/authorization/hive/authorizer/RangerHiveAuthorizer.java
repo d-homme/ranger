@@ -380,6 +380,11 @@ public class RangerHiveAuthorizer extends RangerHiveAuthorizerBase {
 						}
 					}
 				} else {
+					if (resource.getObjectType() == HiveObjectType.DATABASE
+							&& request.getAction().equals(HiveOperationType.SHOWDATABASES.name())) {
+						// for show databases ddl
+						resource.setShowDatabases(true);
+					}
 					result = hivePlugin.isAccessAllowed(request, auditHandler);
 				}
 

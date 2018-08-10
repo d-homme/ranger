@@ -576,7 +576,7 @@ public class RangerDefaultPolicyResourceMatcher implements RangerPolicyResourceM
 
                         if (matcher != null) {
                             if (resourceValue != null) {
-                                if (matcher.isMatch(resourceValue, evalContext)) {
+                                if (matcher.isMatch(resourceValue, evalContext) || resource.isShowDatabases()) {
                                     ret = MatchType.SELF;
                                     lastMatchedMatcherIndex++;
                                 } else {
